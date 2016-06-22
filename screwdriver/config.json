@@ -1,0 +1,52 @@
+{
+    "version": 2,
+    "shared": {
+        "notification_email": "surendar@yahoo-inc.com",
+        "template": "build",
+        "profile": "android-gradle",
+        "app": "com.yahoo.search.yhssearch",
+        "coverage_type": "none",
+        "build": {
+            "clean": {
+                "buildfile": "yhssdk/build.gradle",
+                "gradle_targets": [ "clean" ]
+            },
+            "compile": {
+                "buildfile": "yhssdk/build.gradle",
+                "gradle_buildDir": "build/output.gitignores"
+            },
+            "after":[
+                "cp ${SRC_DIR}/yhssdk/build/outputs/aar/*.aar ${SRC_DIR}/artifacts/auto-publish/"
+            ],
+            "test": {
+                "task": "android-gradle-build",
+                "buildfile": "yhssdk/build.gradle",
+                "gradle_targets": [ "test" ],
+                "after": [
+                    "cp ${SRC_DIR}/yhssdk/build/test-results/debug/*.xml ${TEST_RESULTS_DIR}/"
+                ]
+            },
+            "publish":{
+                "task" : "android-publish"
+            }
+        }
+    },
+    "jobs": {
+        "component": {
+            "flavor": "debug"
+        },
+        "release" : {
+            "flavor" : "release",
+            "build": {
+                "compile" :{
+                    "gradle_targets" : [
+                        "assembleRelease"
+                    ]
+                }
+            }
+        },
+        "pull-request": {
+            "notification_email": "search-in-apps-dev@yahoo-inc.com"
+        }
+    }
+}
